@@ -1,27 +1,35 @@
-
 // express 모듈을 불러옵니다.
-const express = require("express");
+const fs = require("fs");
 // 웹 서버가 사용할 포트 번호를 정의합니다.
 const port = 3000;
+const express = require("express");
+const path = require("path");
 const app = express();
-const path = require('path');
-/**
-* 루트 경로('/')에 대한 GET 요청을 처리
-* 요청이 오면 'Hello World!' 문자열을 응답
-*/
-// req = request(요청), res = response(응답)
 
+// 정적 파일을 제공할 경로를 설정합니다.
+const publicPath = path.join(__dirname, "public");
+app.use(express.static(publicPath));
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(express.json({ extended: true }));
+const jsonpatch = require("jsonpatch");
 
-app.get('/css/login.css', function(req, res) {
-  res.setHeader('Content-Type', 'text/css');
-  res.sendFile(__dirname + '/css/login.css');
-});
+const userController = require("./src/controller.js");
 
-app.get('/', (req, res) => {
-  res.sendfile(path.join(__dirname, '/html/login.html'));
-});
+// 여기는 그냥 날짜설정 코드 / 
+// Express 애플리케이션에 정적 파일 제공 설정 
+// patch - chrome, chrome
 
+// 여기서부터 백엔드서버
+app.post("/submit",userController.submit);
+app.post("/join",userController.join);
+app.post("/info",userController.info);
+app.post("/removePost",userController.removePost);
+app.post("/removeComment",userController.removeComment);
+app.post("/addComment",userController.addComment);
+app.post("/fixNickname",userController.fixNickname);
+app.post("/fixPassword",userController.fixPassword);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Backend server is running on port ${port}`);
 });
