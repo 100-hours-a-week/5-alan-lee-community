@@ -5,7 +5,6 @@ const port = 3000;
 const express = require("express");
 const path = require("path");
 const app = express();
-const x = 0;
 // 정적 파일을 제공할 경로를 설정합니다.
 const publicPath = path.join(__dirname, "public");
 app.use(express.static(publicPath));
